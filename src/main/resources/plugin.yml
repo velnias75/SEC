@@ -1,0 +1,7 @@
+main: de.rangun.sec.SECPlugin
+name: SEC
+description: Super Easy Chairs
+author: Velnias75
+website: https://discord.gg/kQP9QSG6F4
+version: '@version@'
+api-version: '1.17'
