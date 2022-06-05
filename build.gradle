@@ -7,7 +7,7 @@ plugins {
 
 apply plugin: 'java'
 
-version = '1.0'
+version = '1.1-SNAPSHOT'
 
 repositories {
     maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
@@ -19,6 +19,18 @@ dependencies {
     
     implementation "org.bstats:bstats-bukkit:${project.bstats_version}"
 	shadow "org.bstats:bstats-bukkit:${project.bstats_version}"
+	
+	implementation(project(path: ':spiget', configuration: 'shadow')) {
+		exclude group:'dev.derklaro.spiget'
+	}
+	
+	shadow(project(':spiget')) 
+}
+
+task submodulesUpdate(type:Exec) {
+  description 'Updates (and inits) git submodules'
+  commandLine 'git', 'submodule', 'update', '--init', '--recursive', '--remote'
+  group 'Build Setup'
 }
 
 java {
@@ -37,6 +49,7 @@ shadowJar {
 	archiveClassifier.set('')
     
     relocate 'org.bstats', 'de.rangun.sec.shadowed.org.bstats'
+    relocate 'de.rangun.spiget', 'de.rangun.sec.shadowed.de.rangun.spiget'
 
     exclude 'META-INF/**'
     

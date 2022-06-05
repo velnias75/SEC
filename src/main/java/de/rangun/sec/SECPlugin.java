@@ -19,14 +19,23 @@
 
 package de.rangun.sec;
 
+import java.util.List;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.rangun.sec.listener.BlockPlaceListener;
+import de.rangun.sec.listener.JoinListener;
 import de.rangun.sec.listener.PlayerInteractListener;
 import de.rangun.sec.listener.VehicleExitListener;
+import de.rangun.spiget.PluginClient;
 
 public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 05.06.22, 07:22
+
+	private final PluginClient spigetClient = new PluginClient(102446, getDescription().getVersion(), // NOPMD by heiko
+																										// on 05.06.22,
+																										// 13:56
+			getDescription().getName(), getLogger());
 
 	@Override
 	public void onEnable() {
@@ -34,8 +43,15 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 05.06.22,
 		getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		getServer().getPluginManager().registerEvents(new VehicleExitListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+		getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
-		final int pluginId = 15388;
+		final int pluginId = 15388; // NOPMD by heiko on 05.06.22, 13:56
 		new Metrics(this, pluginId);
+
+		spigetClient.checkVersion();
+	}
+
+	public List<String> getJoinMessages() {
+		return spigetClient.getJoinMessages();
 	}
 }

@@ -2,6 +2,6 @@ main: de.rangun.sec.SECPlugin
 name: SEC
 description: Super Easy Chairs
 author: Velnias75
-website: https://github.com/velnias75/SEC
+website: https://www.spigotmc.org/resources/sec.102446/
 version: '@version@'
 api-version: '1.17'
