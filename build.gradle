@@ -2,6 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 apply plugin: 'java'
@@ -12,8 +13,12 @@ repositories {
     maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
 }
 
-dependencies {    
+dependencies {
+
     compileOnly("org.spigotmc:spigot-api:${project.spigot_version}")
+    
+    implementation "org.bstats:bstats-bukkit:${project.bstats_version}"
+	shadow "org.bstats:bstats-bukkit:${project.bstats_version}"
 }
 
 java {
@@ -25,4 +30,19 @@ processResources {
 	duplicatesStrategy = 'include'
         filter ReplaceTokens, tokens: [version: version]
     }
+}
+
+shadowJar {
+
+	archiveClassifier.set('')
+    
+    relocate 'org.bstats', 'de.rangun.sec.shadowed.org.bstats'
+
+    exclude 'META-INF/**'
+    
+    minimize()
+}
+
+assemble {
+	dependsOn shadowJar
 }
