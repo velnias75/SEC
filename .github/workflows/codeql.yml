@@ -40,6 +40,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       
+    - name: Checkout submodule
+        uses: actions/checkout@v2
+        with:
+          path: spiget
+
+    - name: Check versions
+        run: git submodule
+
     - name: Setup Java JDK
       uses: actions/setup-java@v2
       with:
