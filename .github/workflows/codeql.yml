@@ -42,11 +42,11 @@ jobs:
       
     - name: Checkout submodule
       uses: actions/checkout@v2
-        with:
-          path: spiget
+      with:
+        path: spiget
 
     - name: Check versions
-        run: git submodule
+      run: git submodule
 
     - name: Setup Java JDK
       uses: actions/setup-java@v2
