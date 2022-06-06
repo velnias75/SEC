@@ -24,7 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import de.rangun.sec.SECPlugin;
+import de.rangun.spiget.MessageRetriever;
 
 /**
  * @author heiko
@@ -32,11 +32,15 @@ import de.rangun.sec.SECPlugin;
  */
 public final class JoinListener implements Listener {
 
-	private final SECPlugin plugin;
+	private final String pluginName;
+	private final MessageRetriever msgs;
 
-	public JoinListener(final SECPlugin plugin) {
+	public JoinListener(final String pluginName, MessageRetriever msgs) {
+
 		super();
-		this.plugin = plugin;
+
+		this.pluginName = pluginName;
+		this.msgs = msgs;
 	}
 
 	@EventHandler
@@ -44,10 +48,10 @@ public final class JoinListener implements Listener {
 
 		if (event.getPlayer().isOp()) {
 
-			for (final String jm : plugin.getJoinMessages()) {
+			for (final String jm : msgs.getJoinMessages()) {
 				event.getPlayer().sendMessage("" + ChatColor.YELLOW + ChatColor.ITALIC + "[" // NOPMD by heiko on
 																								// 05.06.22, 13:57
-						+ plugin.getDescription().getName() + ": " + jm + "]");
+						+ pluginName + ": " + jm + "]");
 			}
 		}
 	}

@@ -19,6 +19,8 @@
 
 package de.rangun.sec.listener;
 
+import java.util.Set;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -27,11 +29,15 @@ import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Stairs.Shape;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * @author heiko
  *
  */
 class ChairCandidateChecker {
+
+	private static final Set<Material> UNSAFEMATERIAL = ImmutableSet.of(Material.GLOWSTONE);
 
 	protected ChairCandidateChecker() { // NOPMD by heiko on 05.06.22, 06:59
 	}
@@ -49,12 +55,16 @@ class ChairCandidateChecker {
 																								// 05.06.22, 06:58
 						.getBlockPower(BlockFace.UP) > 0
 						|| isActiveTorch(block.getWorld().getBlockAt(block.getX(), block.getY() - 1, block.getZ())))
-						&& isEmptyOrLiquid(block.getWorld().getBlockAt(block.getX(), block.getY() + 1, block.getZ()))
-						&& isEmptyOrLiquid(block.getWorld().getBlockAt(block.getX(), block.getY() + 2, block.getZ())));
+						&& isSaveBlock(block.getWorld().getBlockAt(block.getX(), block.getY() + 1, block.getZ()))
+						&& isSaveBlock(block.getWorld().getBlockAt(block.getX(), block.getY() + 2, block.getZ())));
 	}
 
-	private boolean isEmptyOrLiquid(final Block block) {
-		return block.isEmpty() || block.isLiquid();
+	private boolean isNotOccludingUnsave(final Block block) {
+		return UNSAFEMATERIAL.contains(block.getType());
+	}
+
+	private boolean isSaveBlock(final Block block) {
+		return block.isEmpty() || block.isLiquid() || !(block.getType().isOccluding() || isNotOccludingUnsave(block));
 	}
 
 	private boolean isActiveTorch(final Block block) {

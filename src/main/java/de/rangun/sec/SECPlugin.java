@@ -19,8 +19,6 @@
 
 package de.rangun.sec;
 
-import java.util.List;
-
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,15 +41,11 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 05.06.22,
 		getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		getServer().getPluginManager().registerEvents(new VehicleExitListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
-		getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+		getServer().getPluginManager().registerEvents(new JoinListener(getDescription().getName(), spigetClient), this);
 
 		final int pluginId = 15388; // NOPMD by heiko on 05.06.22, 13:56
 		new Metrics(this, pluginId);
 
 		spigetClient.checkVersion();
-	}
-
-	public List<String> getJoinMessages() {
-		return spigetClient.getJoinMessages();
 	}
 }

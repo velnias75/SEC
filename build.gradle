@@ -33,6 +33,10 @@ task submodulesUpdate(type:Exec) {
   group 'Build Setup'
 }
 
+compileJava {
+	dependsOn submodulesUpdate
+}
+
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(16))
 }
