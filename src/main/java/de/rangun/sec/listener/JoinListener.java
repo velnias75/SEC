@@ -35,7 +35,7 @@ public final class JoinListener implements Listener {
 	private final String pluginName;
 	private final MessageRetriever msgs;
 
-	public JoinListener(final String pluginName, MessageRetriever msgs) {
+	public JoinListener(final String pluginName, final MessageRetriever msgs) {
 
 		super();
 

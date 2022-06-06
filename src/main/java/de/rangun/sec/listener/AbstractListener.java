@@ -23,7 +23,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-abstract class AbstractListener extends ChairCandidateChecker implements Listener {
+abstract class AbstractListener implements Listener {
 
 	protected final NamespacedKey pig;
 

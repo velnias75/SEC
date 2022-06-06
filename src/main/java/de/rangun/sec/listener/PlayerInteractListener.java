@@ -54,7 +54,8 @@ public final class PlayerInteractListener extends AbstractListener {
 		final Action action = event.getAction();
 		final Player player = event.getPlayer();
 
-		if (Action.RIGHT_CLICK_BLOCK.equals(action) && !player.isSneaking() && isValidForChair(block)) {
+		if (Action.RIGHT_CLICK_BLOCK.equals(action) && !player.isSneaking()
+				&& ChairCandidateChecker.isValidForChair(block)) {
 
 			final Location location = player.getLocation();
 

@@ -35,14 +35,14 @@ import com.google.common.collect.ImmutableSet;
  * @author heiko
  *
  */
-class ChairCandidateChecker {
+final class ChairCandidateChecker {
 
 	private static final Set<Material> UNSAFEMATERIAL = ImmutableSet.of(Material.GLOWSTONE);
 
-	protected ChairCandidateChecker() { // NOPMD by heiko on 05.06.22, 06:59
+	private ChairCandidateChecker() {
 	}
 
-	protected final boolean isValidForChair(final Block block) {
+	public static boolean isValidForChair(final Block block) {
 
 		if (!(block.getBlockData() instanceof Stairs)) {
 			return false; // NOPMD by heiko on 05.06.22, 06:58
@@ -59,15 +59,15 @@ class ChairCandidateChecker {
 						&& isSaveBlock(block.getWorld().getBlockAt(block.getX(), block.getY() + 2, block.getZ())));
 	}
 
-	private boolean isNotOccludingUnsave(final Block block) {
+	private static boolean isNotOccludingUnsave(final Block block) {
 		return UNSAFEMATERIAL.contains(block.getType());
 	}
 
-	private boolean isSaveBlock(final Block block) {
+	private static boolean isSaveBlock(final Block block) {
 		return block.isEmpty() || block.isLiquid() || !(block.getType().isOccluding() || isNotOccludingUnsave(block));
 	}
 
-	private boolean isActiveTorch(final Block block) {
+	private static boolean isActiveTorch(final Block block) {
 		return Material.REDSTONE_TORCH.equals(block.getType()) && ((Lightable) block.getBlockData()).isLit();
 	}
 }

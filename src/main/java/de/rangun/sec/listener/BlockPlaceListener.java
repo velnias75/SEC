@@ -30,8 +30,8 @@ import org.bukkit.inventory.ItemStack;
  * @author heiko
  *
  */
-public final class BlockPlaceListener extends ChairCandidateChecker implements Listener { // NOPMD by heiko on 05.06.22,
-																							// 09:35
+public final class BlockPlaceListener implements Listener { // NOPMD by heiko on 05.06.22,
+															// 09:35
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent event) {
 
@@ -39,7 +39,7 @@ public final class BlockPlaceListener extends ChairCandidateChecker implements L
 		final ItemStack handItem = event.getItemInHand();
 
 		if (event.canBuild() && !event.getPlayer().isSneaking() && !Material.AIR.equals(handItem.getType())
-				&& isValidForChair(block)) {
+				&& ChairCandidateChecker.isValidForChair(block)) {
 			event.setCancelled(true);
 		}
 	}
