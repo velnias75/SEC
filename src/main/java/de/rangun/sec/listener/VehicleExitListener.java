@@ -19,7 +19,9 @@
 
 package de.rangun.sec.listener;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.persistence.PersistentDataType;
@@ -38,10 +40,15 @@ public final class VehicleExitListener extends AbstractListener {
 	@EventHandler
 	public void onVehicleExitEvent(final VehicleExitEvent event) {
 
-		if (event.getVehicle().getPersistentDataContainer().has(pig, PersistentDataType.BYTE)) {
+		if (EntityType.PIG.equals(event.getVehicle().getType())
+				&& event.getVehicle().getPersistentDataContainer().has(pig, PersistentDataType.BYTE)) {
 
 			for (final Entity p : event.getVehicle().getPassengers()) {
-				p.teleport(p.getLocation().add(0.0f, 1.5f, 0.0f));
+
+				final Location safeLoc = p.getWorld().getHighestBlockAt(p.getLocation().add(0.0d, 1.5d, 0.0d))
+						.getLocation().add(0.5d, 1.0d, 0.5d);
+
+				p.teleport(safeLoc);
 			}
 
 			event.getVehicle().remove();
