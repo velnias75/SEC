@@ -21,6 +21,7 @@ package de.rangun.sec;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.rangun.sec.listener.BlockPlaceListener;
 import de.rangun.sec.listener.JoinListener;
@@ -46,6 +47,13 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 05.06.22,
 		final int pluginId = 15388; // NOPMD by heiko on 05.06.22, 13:56
 		new Metrics(this, pluginId);
 
-		spigetClient.checkVersion();
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				spigetClient.checkVersion();
+			}
+
+		}.runTaskAsynchronously(this);
 	}
 }
