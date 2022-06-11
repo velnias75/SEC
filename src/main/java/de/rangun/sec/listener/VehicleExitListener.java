@@ -19,7 +19,6 @@
 
 package de.rangun.sec.listener;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -45,10 +44,11 @@ public final class VehicleExitListener extends AbstractListener {
 
 			for (final Entity p : event.getVehicle().getPassengers()) {
 
-				final Location safeLoc = p.getWorld().getHighestBlockAt(p.getLocation().add(0.0d, 1.5d, 0.0d))
-						.getLocation().add(0.5d, 1.0d, 0.5d);
+				// final Location safeLoc =
+				// p.getWorld().getHighestBlockAt(p.getLocation().add(0.0d, 1.5d, 0.0d))
+				// .getLocation().add(0.5d, 1.0d, 0.5d);
 
-				p.teleport(safeLoc);
+				p.teleport(p.getLocation().add(0.0f, 1.5f, 0.0f));
 			}
 
 			event.getVehicle().remove();
