@@ -22,6 +22,7 @@ package de.rangun.sec.listener;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
@@ -30,8 +31,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Consumer;
+
+import de.rangun.sec.SECPlugin;
+import de.rangun.sec.utils.Utils;
 
 /**
  * @author heiko
@@ -39,8 +42,12 @@ import org.bukkit.util.Consumer;
  */
 public final class PlayerInteractListener extends AbstractListener {
 
-	public PlayerInteractListener(final Plugin plugin) {
+	private final SECPlugin plugin;
+
+	public PlayerInteractListener(final SECPlugin plugin) {
+
 		super(plugin);
+		this.plugin = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -54,38 +61,49 @@ public final class PlayerInteractListener extends AbstractListener {
 		final Action action = event.getAction();
 		final Player player = event.getPlayer();
 
-		if (Action.RIGHT_CLICK_BLOCK.equals(action) && !player.isSneaking()
-				&& ChairCandidateChecker.isValidForChair(block)) {
+		if (Action.RIGHT_CLICK_BLOCK.equals(action)) {
 
-			final Location location = player.getLocation();
+			if (!player.isSneaking() && Utils.isValidForChair(block)) {
 
-			location.setYaw(getChairYaw(block));
-			player.teleport(location);
+				final Location location = player.getLocation();
 
-			block.getWorld().spawn(block.getLocation().add(0.5d, -0.5d, 0.5d), Pig.class, new Consumer<Pig>() {
+				location.setYaw(getChairYaw(block));
+				player.teleport(location);
 
-				@Override
-				public void accept(final Pig vehicle) {
+				block.getWorld().spawn(block.getLocation().add(0.5d, -0.5d, 0.5d), Pig.class, new Consumer<Pig>() {
 
-					vehicle.setInvisible(true);
-					vehicle.setSilent(true);
-					vehicle.setInvulnerable(true);
-					vehicle.setGravity(false);
-					vehicle.addPassenger(player);
-					vehicle.setAware(false);
-					vehicle.setAI(false);
-					vehicle.setRotation(getChairYaw(block), 0.0f);
-					vehicle.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(0.0000000001d); // NOPMD by heiko on
-																									// 05.06.22, 09:39
-					vehicle.getPersistentDataContainer().set(pig, PersistentDataType.BYTE, (byte) 1);
-				}
-			});
+					@Override
+					public void accept(final Pig vehicle) {
 
-			event.setCancelled(true);
+						vehicle.setInvisible(true);
+						vehicle.setSilent(true);
+						vehicle.setInvulnerable(true);
+						vehicle.setGravity(false);
+						vehicle.addPassenger(player);
+						vehicle.setAware(false);
+						vehicle.setAI(false);
+						vehicle.setRotation(getChairYaw(block), 0.0f);
+						vehicle.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(0.0000000001d); // NOPMD by
+																										// heiko on
+																										// 05.06.22,
+																										// 09:39
+						vehicle.getPersistentDataContainer().set(pig, PersistentDataType.BYTE, (byte) 1);
+					}
+				});
+
+				event.setCancelled(true);
+			}
+
+			if (Utils.isWasteBin(block, plugin.getDescription().getName())) {
+
+				player.openInventory(plugin.getWasteBin((Hopper) block.getState()));
+				event.setCancelled(true);
+			}
 		}
 	}
 
 	private float getChairYaw(final Block block) {
+
 		switch (((Stairs) block.getBlockData()).getFacing()) {
 		case SOUTH:
 			return 180.0f; // NOPMD by heiko on 05.06.22, 09:36

@@ -19,31 +19,31 @@
 
 package de.rangun.sec.listener;
 
-import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.block.BlockBreakEvent;
 
+import de.rangun.sec.SECPlugin;
 import de.rangun.sec.utils.Utils;
 
 /**
  * @author heiko
  *
  */
-public final class BlockPlaceListener implements Listener { // NOPMD by heiko on 13.06.22, 15:35
+public final class BlockBreakListener implements Listener {
+
+	private final SECPlugin plugin;
+
+	public BlockBreakListener(final SECPlugin plugin) {
+		this.plugin = plugin;
+	}
 
 	@EventHandler
-	public void onBlockPlaceEvent(final BlockPlaceEvent event) {
+	public void onBlockBreakEvent(final BlockBreakEvent event) {
 
-		final Block block = event.getBlockAgainst();
-		final ItemStack handItem = event.getItemInHand();
-
-		if (event.canBuild() && !event.getPlayer().isSneaking() && !Material.AIR.equals(handItem.getType())
-				&& Utils.isValidForChair(block)) {
-
-			event.setCancelled(true);
+		if (Utils.isWasteBin(event.getBlock(), plugin.getDescription().getName())) {
+			plugin.removeWasteBinHopper((Hopper) event.getBlock().getState());
 		}
 	}
 }

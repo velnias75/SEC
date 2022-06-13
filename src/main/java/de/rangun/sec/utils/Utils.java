@@ -17,13 +17,14 @@
  * along with SEC.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.rangun.sec.listener;
+package de.rangun.sec.utils;
 
 import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Stairs;
@@ -35,11 +36,11 @@ import com.google.common.collect.ImmutableSet;
  * @author heiko
  *
  */
-final class ChairCandidateChecker {
+public final class Utils {
 
 	private static final Set<Material> UNSAFEMATERIAL = ImmutableSet.of(Material.GLOWSTONE);
 
-	private ChairCandidateChecker() {
+	private Utils() {
 	}
 
 	public static boolean isValidForChair(final Block block) {
@@ -69,5 +70,12 @@ final class ChairCandidateChecker {
 
 	private static boolean isActiveTorch(final Block block) {
 		return Material.REDSTONE_TORCH.equals(block.getType()) && ((Lightable) block.getBlockData()).isLit();
+	}
+
+	public static boolean isWasteBin(final Block block, final String pluginName) {
+
+		return Material.HOPPER.equals(block.getType()) && ((Hopper) block.getState()).getCustomName() != null
+				&& ("[" + pluginName + "] ") // NOPMD by heiko on 13.06.22, 15:34
+						.equals(((Hopper) block.getState()).getCustomName().substring(0, pluginName.length() + 3));
 	}
 }
