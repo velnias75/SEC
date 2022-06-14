@@ -47,7 +47,7 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 
 	private final static Map<String, SECWasteBin> WASTEBINS = new ConcurrentHashMap<>();
 
-	public static final class SECWasteBin implements InventoryHolder {
+	private static final class SECWasteBin implements InventoryHolder {
 
 		private final Inventory inv;
 		private final String name;
