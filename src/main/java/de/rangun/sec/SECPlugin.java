@@ -54,7 +54,10 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 		private final Set<Hopper> wasteBinHoppers = new HashSet<>();
 
 		public SECWasteBin(final Plugin plugin, final String name) {
-			this.name = name;
+
+			this.name = !ChatColor.stripColor(name).isEmpty() ? ChatColor.translateAlternateColorCodes('&', name) // NOPMD by heiko on 14.06.22, 04:22
+					: "" + ChatColor.RESET + ChatColor.DARK_RED + ChatColor.BOLD + plugin.getDescription().getName() // NOPMD by heiko on 14.06.22, 04:22
+							+ " by " + String.join(", ", plugin.getDescription().getAuthors());
 
 			this.inv = Bukkit.createInventory(this, 54, this.name);
 
@@ -121,7 +124,7 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 	}
 
 	public void removeWasteBinHopper(final Hopper hopper) {
-		WASTEBINS.get(hopper.getCustomName()).removeWasteBinHopper(hopper);
+		WASTEBINS.get(normalizedWasteBinName(hopper.getCustomName())).removeWasteBinHopper(hopper);
 	}
 
 	public Inventory getWasteBin(final Hopper hopper) {
@@ -130,18 +133,24 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 			throw new IllegalStateException("Hopper is not a waste bin hopper");
 		}
 
-		WASTEBINS.putIfAbsent(hopper.getCustomName(), new SECWasteBin(this, "" + ChatColor.GOLD + ChatColor.BOLD // NOPMD
-																													// by
-																													// heiko
-																													// on
-																													// 13.06.22,
-																													// 15:41
+		final String binName = normalizedWasteBinName(hopper.getCustomName());
+
+		WASTEBINS.putIfAbsent(binName, new SECWasteBin(this, "" + ChatColor.GOLD + ChatColor.BOLD // NOPMD
+																									// by
+																									// heiko
+																									// on
+																									// 13.06.22,
+																									// 15:41
 				+ hopper.getCustomName().substring(getDescription().getName().length() + 3)));
 
-		final SECWasteBin bin = WASTEBINS.get(hopper.getCustomName());
+		final SECWasteBin bin = WASTEBINS.get(binName);
 
 		bin.addWasteBinHopper(hopper);
 
 		return bin.getInventory();
+	}
+
+	private String normalizedWasteBinName(final String name) {
+		return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', name));
 	}
 }
