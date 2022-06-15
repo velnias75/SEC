@@ -1,4 +1,4 @@
-# SEC - Super Easy Chairs ![Spiget Version](https://img.shields.io/spiget/version/102446?label=Latest%20version)
+# SEC - Super Easy Chairs ![Spiget Version](https://img.shields.io/spiget/version/102446?label=Latest%20version) [![CodeQL](https://github.com/velnias75/SEC/actions/workflows/codeql.yml/badge.svg)](https://github.com/velnias75/SEC/actions/workflows/codeql.yml)
 
 <img src="https://github.com/velnias75/SEC/raw/master/icon.svg" height="64px">  Turn any stairs to sittable chairs by just putting a `redstone block` under it, or just by powering the block under the chair with redstone.
 
