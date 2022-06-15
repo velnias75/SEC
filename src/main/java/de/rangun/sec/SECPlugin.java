@@ -140,7 +140,7 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 		final SECWasteBin wasteBin = WASTEBINS.get(normalizedWasteBinName(hopper.getCustomName()));
 
 		if (wasteBin != null) {
-			removeWasteBinHopper(hopper);
+			wasteBin.removeWasteBinHopper(hopper);
 		}
 	}
 
