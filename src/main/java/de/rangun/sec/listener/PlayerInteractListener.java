@@ -20,6 +20,7 @@
 package de.rangun.sec.listener;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
@@ -61,7 +62,8 @@ public final class PlayerInteractListener extends AbstractListener {
 		final Action action = event.getAction();
 		final Player player = event.getPlayer();
 
-		if (Action.RIGHT_CLICK_BLOCK.equals(action) && !player.isSneaking()) {
+		if (Action.RIGHT_CLICK_BLOCK.equals(action) && !(player.isSneaking()
+				&& !Material.AIR.equals(player.getInventory().getItemInMainHand().getType()))) {
 
 			if (Utils.isValidForChair(block)) {
 

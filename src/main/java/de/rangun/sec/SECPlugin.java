@@ -40,6 +40,7 @@ import de.rangun.sec.listener.BlockPlaceListener;
 import de.rangun.sec.listener.JoinListener;
 import de.rangun.sec.listener.PlayerInteractListener;
 import de.rangun.sec.listener.VehicleExitListener;
+import de.rangun.sec.listener.WasteBinListener;
 import de.rangun.sec.utils.Utils;
 import de.rangun.spiget.PluginClient;
 
@@ -55,8 +56,18 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 
 		public SECWasteBin(final Plugin plugin, final String name) {
 
-			this.name = !ChatColor.stripColor(name).isEmpty() ? ChatColor.translateAlternateColorCodes('&', name) // NOPMD by heiko on 14.06.22, 04:22
-					: "" + ChatColor.RESET + ChatColor.DARK_RED + ChatColor.BOLD + plugin.getDescription().getName() // NOPMD by heiko on 14.06.22, 04:22
+			this.name = !ChatColor.stripColor(name).isEmpty() ? ChatColor.translateAlternateColorCodes('&', name) // NOPMD
+																													// by
+																													// heiko
+																													// on
+																													// 14.06.22,
+																													// 04:22
+					: "" + ChatColor.RESET + ChatColor.DARK_RED + ChatColor.BOLD + plugin.getDescription().getName() // NOPMD
+																														// by
+																														// heiko
+																														// on
+																														// 14.06.22,
+																														// 04:22
 							+ " by " + String.join(", ", plugin.getDescription().getAuthors());
 
 			this.inv = Bukkit.createInventory(this, 54, this.name);
@@ -109,6 +120,7 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 		getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(getDescription().getName(), spigetClient), this);
+		getServer().getPluginManager().registerEvents(new WasteBinListener(this), this);
 
 		final int pluginId = 15388; // NOPMD by heiko on 05.06.22, 13:56
 		new Metrics(this, pluginId);
@@ -124,7 +136,12 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 	}
 
 	public void removeWasteBinHopper(final Hopper hopper) {
-		WASTEBINS.get(normalizedWasteBinName(hopper.getCustomName())).removeWasteBinHopper(hopper);
+
+		final SECWasteBin wasteBin = WASTEBINS.get(normalizedWasteBinName(hopper.getCustomName()));
+
+		if (wasteBin != null) {
+			removeWasteBinHopper(hopper);
+		}
 	}
 
 	public Inventory getWasteBin(final Hopper hopper) {
@@ -151,6 +168,8 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 	}
 
 	private String normalizedWasteBinName(final String name) {
-		return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', name));
+		// return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',
+		// name));
+		return name;
 	}
 }
