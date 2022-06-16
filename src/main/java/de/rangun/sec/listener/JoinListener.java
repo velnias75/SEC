@@ -19,12 +19,12 @@
 
 package de.rangun.sec.listener;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import de.rangun.spiget.MessageRetriever;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * @author heiko
@@ -32,14 +32,10 @@ import de.rangun.spiget.MessageRetriever;
  */
 public final class JoinListener implements Listener {
 
-	private final String pluginName;
 	private final MessageRetriever msgs;
 
-	public JoinListener(final String pluginName, final MessageRetriever msgs) {
-
+	public JoinListener(final MessageRetriever msgs) {
 		super();
-
-		this.pluginName = pluginName;
 		this.msgs = msgs;
 	}
 
@@ -48,11 +44,9 @@ public final class JoinListener implements Listener {
 
 		if (event.getPlayer().isOp()) {
 
-			for (final String jm : msgs.getJoinMessages()) {
-				event.getPlayer().sendMessage("" + ChatColor.YELLOW + ChatColor.ITALIC + "[" // NOPMD by heiko on
-																								// 05.06.22, 13:57
-						+ pluginName + ": " + jm + "]");
-			}
+			msgs.sendJoinComponents((msg) -> {
+				event.getPlayer().spigot().sendMessage(msg);
+			}, ChatColor.YELLOW);
 		}
 	}
 }

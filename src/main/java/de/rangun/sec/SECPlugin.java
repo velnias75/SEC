@@ -119,7 +119,7 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 		getServer().getPluginManager().registerEvents(new VehicleExitListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 		getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
-		getServer().getPluginManager().registerEvents(new JoinListener(getDescription().getName(), spigetClient), this);
+		getServer().getPluginManager().registerEvents(new JoinListener(spigetClient), this);
 		getServer().getPluginManager().registerEvents(new WasteBinListener(this), this);
 
 		final int pluginId = 15388; // NOPMD by heiko on 05.06.22, 13:56
