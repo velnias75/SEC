@@ -68,7 +68,7 @@ public final class WasteBinListener implements Listener {
 
 		final Block block = getBlockFromInventory(event.getDestination());
 
-		if (event.getDestination().getHolder() instanceof Hopper
+		if (block != null && event.getDestination().getHolder() instanceof Hopper
 				&& Utils.isWasteBin(block, plugin.getDescription().getName())) {
 
 			event.setCancelled(true);
@@ -104,7 +104,9 @@ public final class WasteBinListener implements Listener {
 	}
 
 	private Block getBlockFromInventory(final Inventory inv) {
-		return ((BlockInventoryHolder) inv.getHolder()).getBlock().getWorld().getBlockAt(inv.getLocation());
+		return inv.getHolder() instanceof BlockInventoryHolder && inv.getLocation() != null
+				? ((BlockInventoryHolder) inv.getHolder()).getBlock().getWorld().getBlockAt(inv.getLocation())
+				: null;
 	}
 
 	private Map<Integer, ItemStack> transferToWasteBin(final Block block, final ItemStack itemStack) {
