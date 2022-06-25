@@ -24,6 +24,7 @@ import java.util.Map;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -47,8 +48,12 @@ public final class WasteBinListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryPickupItemEvent(final InventoryPickupItemEvent event) {
+
+		if (!plugin.isWasteBinsEnabled()) {
+			return;
+		}
 
 		final Block block = getBlockFromInventory(event.getInventory());
 
@@ -63,8 +68,12 @@ public final class WasteBinListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryMoveItemEvent(final InventoryMoveItemEvent event) {
+
+		if (!plugin.isWasteBinsEnabled()) {
+			return;
+		}
 
 		final Block block = getBlockFromInventory(event.getDestination());
 
@@ -112,10 +121,4 @@ public final class WasteBinListener implements Listener {
 	private Map<Integer, ItemStack> transferToWasteBin(final Block block, final ItemStack itemStack) {
 		return plugin.getWasteBin((Hopper) block.getState()).addItem(itemStack);
 	}
-
-	/*--
-	private boolean isFull(final Block block) {
-		return Arrays.stream(plugin.getWasteBin((Hopper) block.getState()).getStorageContents())
-				.anyMatch(itemStack -> itemStack == null || itemStack.getAmount() < itemStack.getMaxStackSize());
-	} */
 }

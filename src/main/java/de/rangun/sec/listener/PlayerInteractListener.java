@@ -62,7 +62,7 @@ public final class PlayerInteractListener extends AbstractListener {
 		final Action action = event.getAction();
 		final Player player = event.getPlayer();
 
-		if (Action.RIGHT_CLICK_BLOCK.equals(action) && !(player.isSneaking()
+		if (plugin.isChairsEnabled() && Action.RIGHT_CLICK_BLOCK.equals(action) && !(player.isSneaking()
 				&& !Material.AIR.equals(player.getInventory().getItemInMainHand().getType()))) {
 
 			if (Utils.isValidForChair(block)) {
@@ -96,7 +96,7 @@ public final class PlayerInteractListener extends AbstractListener {
 				event.setCancelled(true);
 			}
 
-			if (Utils.isWasteBin(block, plugin.getDescription().getName())) {
+			if (plugin.isWasteBinsEnabled() && Utils.isWasteBin(block, plugin.getDescription().getName())) {
 
 				player.openInventory(plugin.getWasteBin((Hopper) block.getState()));
 				event.setCancelled(true);

@@ -1,0 +1,6 @@
+# SEC configuration
+#
+# DO NOT TOUCH! Use /sec-command instead!
+
+wastebins_enabled: false
+chairs_enabled: true
