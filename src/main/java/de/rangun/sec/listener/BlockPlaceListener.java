@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.rangun.sec.SECPlugin;
 import de.rangun.sec.utils.Utils;
 
 /**
@@ -34,8 +35,18 @@ import de.rangun.sec.utils.Utils;
  */
 public final class BlockPlaceListener implements Listener { // NOPMD by heiko on 13.06.22, 15:35
 
+	private final SECPlugin plugin;
+
+	public BlockPlaceListener(final SECPlugin plugin) {
+		this.plugin = plugin;
+	}
+
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent event) {
+
+		if (!plugin.isChairsEnabled()) {
+			return;
+		}
 
 		final Block block = event.getBlockAgainst();
 		final ItemStack handItem = event.getItemInHand();

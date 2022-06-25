@@ -4,4 +4,9 @@ description: Super Easy Chairs
 author: Velnias75
 website: https://www.spigotmc.org/resources/sec.102446/
 version: '@version@'
+commands:
+  sec:
+    description: Shows the config GUI
+    permission: sec.admin
+    usage: /sec
 api-version: '1.17'

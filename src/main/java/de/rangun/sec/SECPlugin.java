@@ -29,12 +29,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.block.Hopper;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import de.rangun.sec.commands.SECCommand;
+import de.rangun.sec.gui.ConfigGUI;
+import de.rangun.sec.gui.ConfigGUICallback;
 import de.rangun.sec.listener.BlockBreakListener;
 import de.rangun.sec.listener.BlockPlaceListener;
 import de.rangun.sec.listener.JoinListener;
@@ -44,7 +48,11 @@ import de.rangun.sec.listener.WasteBinListener;
 import de.rangun.sec.utils.Utils;
 import de.rangun.spiget.PluginClient;
 
-public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22, 15:41
+public final class SECPlugin extends JavaPlugin implements ConfigGUICallback { // NOPMD by heiko on 25.06.22, 09:13
+
+	private ConfigGUI configGui;
+
+	private FileConfiguration config;
 
 	private final static Map<String, SECWasteBin> WASTEBINS = new ConcurrentHashMap<>();
 
@@ -115,12 +123,23 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 	@Override
 	public void onEnable() {
 
+		saveResource("config.yml", false);
+
+		config = getConfig();
+		configGui = new ConfigGUI(this);
+
 		getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		getServer().getPluginManager().registerEvents(new VehicleExitListener(this), this);
-		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+		getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(spigetClient), this);
 		getServer().getPluginManager().registerEvents(new WasteBinListener(this), this);
+		getServer().getPluginManager().registerEvents(getConfigGUI(), this);
+
+		final SECCommand sec = new SECCommand(this);
+
+		getCommand("sec").setExecutor(sec);
+		getCommand("sec").setTabCompleter(sec);
 
 		final int pluginId = 15388; // NOPMD by heiko on 05.06.22, 13:56
 		new Metrics(this, pluginId);
@@ -171,5 +190,29 @@ public final class SECPlugin extends JavaPlugin { // NOPMD by heiko on 13.06.22,
 		// return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',
 		// name));
 		return name;
+	}
+
+	public ConfigGUI getConfigGUI() {
+		return configGui;
+	}
+
+	@Override
+	public void setChairsEnabled(final Boolean enabled) {
+		config.set("chairs_enabled", enabled);
+	}
+
+	@Override
+	public void setWasteBinEnabled(final Boolean enabled) {
+		config.set("wastebins_enabled", enabled);
+	}
+
+	@Override
+	public boolean isChairsEnabled() {
+		return config.getBoolean("chairs_enabled", true);
+	}
+
+	@Override
+	public boolean isWasteBinsEnabled() {
+		return config.getBoolean("wastebins_enabled", false);
 	}
 }

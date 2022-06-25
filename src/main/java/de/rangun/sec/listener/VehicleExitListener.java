@@ -24,7 +24,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
+
+import de.rangun.sec.SECPlugin;
 
 /**
  * @author heiko
@@ -32,7 +33,7 @@ import org.bukkit.plugin.Plugin;
  */
 public final class VehicleExitListener extends AbstractListener {
 
-	public VehicleExitListener(final Plugin plugin) {
+	public VehicleExitListener(final SECPlugin plugin) {
 		super(plugin);
 	}
 
@@ -43,11 +44,6 @@ public final class VehicleExitListener extends AbstractListener {
 				&& event.getVehicle().getPersistentDataContainer().has(pig, PersistentDataType.BYTE)) {
 
 			for (final Entity p : event.getVehicle().getPassengers()) {
-
-				// final Location safeLoc =
-				// p.getWorld().getHighestBlockAt(p.getLocation().add(0.0d, 1.5d, 0.0d))
-				// .getLocation().add(0.5d, 1.0d, 0.5d);
-
 				p.teleport(p.getLocation().add(0.0f, 1.5f, 0.0f));
 			}
 
