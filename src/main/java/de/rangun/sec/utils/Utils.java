@@ -21,7 +21,10 @@ package de.rangun.sec.utils;
 
 import java.util.Set;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
@@ -29,6 +32,9 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Stairs.Shape;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.persistence.PersistentDataType;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -77,5 +83,15 @@ public final class Utils {
 		return Material.HOPPER.equals(block.getType()) && ((Hopper) block.getState()).getCustomName() != null
 				&& ("[" + pluginName + "] ") // NOPMD by heiko on 13.06.22, 15:34
 						.equals(((Hopper) block.getState()).getCustomName().substring(0, pluginName.length() + 3));
+	}
+
+	public static void removeNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig) {
+
+		for (final Entity ent : world.getNearbyEntities(location, 1.0d, 1.0d, 1.0d,
+				(entity) -> EntityType.PIG.equals(entity.getType())
+						&& entity.getPersistentDataContainer().has(pig, PersistentDataType.BYTE))) {
+
+			ent.remove();
+		}
 	}
 }

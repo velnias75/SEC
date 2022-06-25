@@ -19,31 +19,28 @@
 
 package de.rangun.sec.listener;
 
-import org.bukkit.block.Hopper;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.Plugin;
 
-import de.rangun.sec.SECPlugin;
 import de.rangun.sec.utils.Utils;
 
 /**
  * @author heiko
  *
  */
-public final class BlockBreakListener implements Listener {
+public final class PlayerDeathListener extends AbstractListener {
 
-	private final SECPlugin plugin;
-
-	public BlockBreakListener(final SECPlugin plugin) {
-		this.plugin = plugin;
+	public PlayerDeathListener(final Plugin plugin) {
+		super(plugin);
 	}
 
 	@EventHandler
-	public void onBlockBreakEvent(final BlockBreakEvent event) {
+	public void onPlayerDeathEvent(final PlayerDeathEvent event) {
 
-		if (Utils.isWasteBin(event.getBlock(), plugin.getDescription().getName())) {
-			plugin.removeWasteBinHopper((Hopper) event.getBlock().getState());
-		}
+		final Player player = event.getEntity();
+
+		Utils.removeNearbyZordanPigs(player.getWorld(), player.getLocation(), pig);
 	}
 }

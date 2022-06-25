@@ -39,9 +39,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import de.rangun.sec.commands.SECCommand;
 import de.rangun.sec.gui.ConfigGUI;
 import de.rangun.sec.gui.ConfigGUICallback;
-import de.rangun.sec.listener.BlockBreakListener;
+import de.rangun.sec.listener.BlockBreakExplodeListener;
 import de.rangun.sec.listener.BlockPlaceListener;
 import de.rangun.sec.listener.JoinListener;
+import de.rangun.sec.listener.PlayerDeathListener;
 import de.rangun.sec.listener.PlayerInteractListener;
 import de.rangun.sec.listener.VehicleExitListener;
 import de.rangun.sec.listener.WasteBinListener;
@@ -131,9 +132,10 @@ public final class SECPlugin extends JavaPlugin implements ConfigGUICallback { /
 		getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		getServer().getPluginManager().registerEvents(new VehicleExitListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
-		getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
+		getServer().getPluginManager().registerEvents(new BlockBreakExplodeListener(this), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(spigetClient), this);
 		getServer().getPluginManager().registerEvents(new WasteBinListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
 		getServer().getPluginManager().registerEvents(getConfigGUI(), this);
 
 		final SECCommand sec = new SECCommand(this);
