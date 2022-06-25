@@ -124,7 +124,7 @@ public final class SECPlugin extends JavaPlugin implements ConfigGUICallback { /
 	@Override
 	public void onEnable() {
 
-		saveResource("config.yml", false);
+		saveDefaultConfig();
 
 		config = getConfig();
 		configGui = new ConfigGUI(this);
