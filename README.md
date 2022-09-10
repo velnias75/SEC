@@ -5,7 +5,7 @@
 ![Sitting](https://user-images.githubusercontent.com/4481414/172078919-80c1cb25-5bc0-4f1b-8247-e217bb389ce9.png)
 ![How to place](https://user-images.githubusercontent.com/4481414/172078926-97a34a98-874c-421c-b9be-78e0b0c87d95.png)
 
-### Instalation
+### Installation
 
 Just drop the `jar` into your plugins folder, thats all. No configuration!
 
