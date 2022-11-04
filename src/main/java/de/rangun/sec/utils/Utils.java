@@ -20,6 +20,7 @@
 package de.rangun.sec.utils;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -47,6 +48,10 @@ public final class Utils {
 	private static final Set<Material> UNSAFEMATERIAL = ImmutableSet.of(Material.GLOWSTONE);
 
 	private Utils() {
+	}
+
+	public static Location getPigLocation(final Block block) {
+		return block.getLocation().add(0.5d, -0.5d, 0.5d);
 	}
 
 	public static boolean isValidForChair(final Block block) {
@@ -85,13 +90,18 @@ public final class Utils {
 						.equals(((Hopper) block.getState()).getCustomName().substring(0, pluginName.length() + 3));
 	}
 
-	public static void removeNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig) {
+	public static Boolean doForNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig,
+			final Predicate<Entity> consumer) {
 
 		for (final Entity ent : world.getNearbyEntities(location, 1.0d, 1.0d, 1.0d,
 				(entity) -> EntityType.PIG.equals(entity.getType())
 						&& entity.getPersistentDataContainer().has(pig, PersistentDataType.BYTE))) {
 
-			ent.remove();
+			if (consumer != null) {
+				return consumer.test(ent); // NOPMD by heiko on 04.11.22, 07:06
+			}
 		}
+
+		return null;
 	}
 }

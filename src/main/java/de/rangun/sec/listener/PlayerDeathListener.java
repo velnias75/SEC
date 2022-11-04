@@ -41,6 +41,11 @@ public final class PlayerDeathListener extends AbstractListener {
 
 		final Player player = event.getEntity();
 
-		Utils.removeNearbyZordanPigs(player.getWorld(), player.getLocation(), pig);
+		Utils.doForNearbyZordanPigs(player.getWorld(), player.getLocation(), pig, (p) -> {
+
+			p.remove();
+			return true;
+
+		});
 	}
 }

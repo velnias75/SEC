@@ -55,7 +55,7 @@ public final class PlayerInteractListener extends AbstractListener {
 	public void onPlayerInteractEvent(final PlayerInteractEvent event) {
 
 		if (!event.hasBlock()) {
-			return;
+			return; // NOPMD by heiko on 04.11.22, 07:06
 		}
 
 		final Block block = event.getClickedBlock();
@@ -67,12 +67,21 @@ public final class PlayerInteractListener extends AbstractListener {
 
 			if (Utils.isValidForChair(block)) {
 
+				final Boolean zpigAtBlock = Utils.doForNearbyZordanPigs(block.getWorld(), block.getLocation(), pig,
+						(p) -> {
+							return p.getPassengers().isEmpty();
+						});
+
+				if (zpigAtBlock != null && !zpigAtBlock) {
+					return;
+				}
+
 				final Location location = player.getLocation();
 
 				location.setYaw(getChairYaw(block));
 				player.teleport(location);
 
-				block.getWorld().spawn(block.getLocation().add(0.5d, -0.5d, 0.5d), Pig.class, new Consumer<Pig>() {
+				block.getWorld().spawn(Utils.getPigLocation(block), Pig.class, new Consumer<Pig>() {
 
 					@Override
 					public void accept(final Pig vehicle) {
