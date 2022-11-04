@@ -40,6 +40,7 @@ import de.rangun.sec.commands.SECCommand;
 import de.rangun.sec.gui.ConfigGUI;
 import de.rangun.sec.gui.ConfigGUICallback;
 import de.rangun.sec.listener.BlockBreakExplodeListener;
+import de.rangun.sec.listener.BlockPhysicsListener;
 import de.rangun.sec.listener.BlockPlaceListener;
 import de.rangun.sec.listener.EntityDeathListener;
 import de.rangun.sec.listener.JoinListener;
@@ -138,6 +139,7 @@ public final class SECPlugin extends JavaPlugin implements ConfigGUICallback { /
 		getServer().getPluginManager().registerEvents(new WasteBinListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
 		getServer().getPluginManager().registerEvents(new EntityDeathListener(this), this);
+		getServer().getPluginManager().registerEvents(new BlockPhysicsListener(this), this);
 		getServer().getPluginManager().registerEvents(getConfigGUI(), this);
 
 		final SECCommand sec = new SECCommand(this);

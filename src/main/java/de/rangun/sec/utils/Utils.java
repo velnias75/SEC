@@ -30,6 +30,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Stairs.Shape;
@@ -56,19 +57,31 @@ public final class Utils {
 
 	public static boolean isValidForChair(final Block block) {
 
-		if (!(block.getBlockData() instanceof Stairs)) {
+		return isValidForChair(block, (p) -> {
+			return p.getWorld().getBlockAt(p.getX(), p.getY() - 1, p.getZ()).isBlockFacePowered(BlockFace.UP);
+		});
+	}
+
+	public static boolean isValidForChair(final Block block, final Predicate<Block> powerCheck) {
+
+		final BlockData blockData = block.getBlockData();
+
+		if (!(blockData instanceof Stairs)) {
 			return false; // NOPMD by heiko on 05.06.22, 06:58
 		}
 
-		final Stairs stair = (Stairs) block.getBlockData();
+		final Stairs stair = (Stairs) blockData;
+
+		final World world = block.getWorld();
+
+		final int blockX = block.getX();
+		final int blockY = block.getX();
+		final int blockZ = block.getX();
 
 		return Shape.STRAIGHT.equals(stair.getShape()) && Half.BOTTOM.equals(stair.getHalf())
-				&& ((block.getWorld().getBlockAt(block.getX(), block.getY() - 1, block.getZ()) // NOPMD by heiko on
-																								// 05.06.22, 06:58
-						.getBlockPower(BlockFace.UP) > 0
-						|| isActiveTorch(block.getWorld().getBlockAt(block.getX(), block.getY() - 1, block.getZ())))
-						&& isSaveBlock(block.getWorld().getBlockAt(block.getX(), block.getY() + 1, block.getZ()))
-						&& isSaveBlock(block.getWorld().getBlockAt(block.getX(), block.getY() + 2, block.getZ())));
+				&& (powerCheck.test(block) || isActiveTorch(world.getBlockAt(blockX, blockY - 1, blockZ)))
+				&& isSaveBlock(world.getBlockAt(blockX, blockY + 1, blockZ))
+				&& isSaveBlock(world.getBlockAt(blockX, blockY + 2, blockZ));
 	}
 
 	private static boolean isNotOccludingUnsave(final Block block) {
@@ -93,7 +106,7 @@ public final class Utils {
 	public static Boolean doForNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig,
 			final Predicate<Entity> consumer) {
 
-		for (final Entity ent : world.getNearbyEntities(location, 1.0d, 1.0d, 1.0d,
+		for (final Entity ent : world.getNearbyEntities(location, 0.5d, 0.5d, 0.5d,
 				(entity) -> EntityType.PIG.equals(entity.getType())
 						&& entity.getPersistentDataContainer().has(pig, PersistentDataType.BYTE))) {
 

@@ -19,6 +19,7 @@
 
 package de.rangun.sec.listener;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -40,6 +41,10 @@ public final class EntityDeathListener extends AbstractListener {
 
 		if (EntityType.PIG.equals(event.getEntity().getType())
 				&& event.getEntity().getPersistentDataContainer().has(pig, PersistentDataType.BYTE)) {
+
+			for (final Entity ent : event.getEntity().getPassengers()) {
+				ent.teleport(ent.getLocation().add(0.0f, 1.5f, 0.0f));
+			}
 
 			event.getDrops().clear();
 			event.setDroppedExp(0);
