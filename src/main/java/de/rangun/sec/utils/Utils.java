@@ -58,7 +58,14 @@ public final class Utils {
 	public static boolean isValidForChair(final Block block) {
 
 		return isValidForChair(block, (p) -> {
-			return p.getWorld().getBlockAt(p.getX(), p.getY() - 1, p.getZ()).isBlockFacePowered(BlockFace.UP);
+
+			final World world = p.getWorld();
+
+			final int blockX = p.getX();
+			final int blockY = p.getY();
+			final int blockZ = p.getZ();
+
+			return world.getBlockAt(blockX, blockY - 1, blockZ).isBlockFacePowered(BlockFace.UP);
 		});
 	}
 
@@ -75,8 +82,8 @@ public final class Utils {
 		final World world = block.getWorld();
 
 		final int blockX = block.getX();
-		final int blockY = block.getX();
-		final int blockZ = block.getX();
+		final int blockY = block.getY();
+		final int blockZ = block.getZ();
 
 		return Shape.STRAIGHT.equals(stair.getShape()) && Half.BOTTOM.equals(stair.getHalf())
 				&& (powerCheck.test(block) || isActiveTorch(world.getBlockAt(blockX, blockY - 1, blockZ)))
