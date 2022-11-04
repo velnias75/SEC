@@ -84,6 +84,8 @@ public final class PlayerInteractListener extends AbstractListener {
 						vehicle.addPassenger(player);
 						vehicle.setAware(false);
 						vehicle.setAI(false);
+						vehicle.setLootTable(null);
+						vehicle.addScoreboardTag(TAG);
 						vehicle.setRotation(getChairYaw(block), 0.0f);
 						vehicle.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(0.0000000001d); // NOPMD by
 																										// heiko on

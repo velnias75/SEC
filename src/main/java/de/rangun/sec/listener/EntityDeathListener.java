@@ -19,18 +19,30 @@
 
 package de.rangun.sec.listener;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.event.Listener;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
-abstract class AbstractListener implements Listener {
+/**
+ * @author heiko
+ *
+ */
+public final class EntityDeathListener extends AbstractListener {
 
-	protected final static String TAG = "seczpig";
+	public EntityDeathListener(final Plugin plugin) {
+		super(plugin);
+	}
 
-	protected final NamespacedKey pig;
+	@EventHandler
+	public void onEntityDeathEvent(final EntityDeathEvent event) {
 
-	protected AbstractListener(final Plugin plugin) {
-		super();
-		this.pig = new NamespacedKey(plugin, "zordans_pig");
+		if (EntityType.PIG.equals(event.getEntity().getType())
+				&& event.getEntity().getPersistentDataContainer().has(pig, PersistentDataType.BYTE)) {
+
+			event.getDrops().clear();
+			event.setDroppedExp(0);
+		}
 	}
 }
