@@ -113,7 +113,7 @@ public final class Utils {
 	public static Boolean doForNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig,
 			final Predicate<Entity> consumer) {
 
-		for (final Entity ent : world.getNearbyEntities(location, 0.5d, 0.5d, 0.5d,
+		for (final Entity ent : world.getNearbyEntities(location, 1d, 1d, 1d,
 				(entity) -> EntityType.PIG.equals(entity.getType())
 						&& entity.getPersistentDataContainer().has(pig, PersistentDataType.BYTE))) {
 

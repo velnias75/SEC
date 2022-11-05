@@ -19,12 +19,15 @@
 
 package de.rangun.sec.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.plugin.Plugin;
 
 import de.rangun.sec.utils.Utils;
@@ -33,30 +36,25 @@ import de.rangun.sec.utils.Utils;
  * @author heiko
  *
  */
-public final class BlockPhysicsListener extends AbstractListener {
+public final class BlockRedstoneListener extends AbstractListener {
 
-	public BlockPhysicsListener(final Plugin plugin) {
+	public BlockRedstoneListener(final Plugin plugin) {
 		super(plugin);
 	}
 
 	@EventHandler
-	public void onBlockPhysicsEvent(final BlockPhysicsEvent event) {
+	public void onBlockRedstoneEvent(final BlockRedstoneEvent event) {
 
-		if (event.isCancelled()) {
-			return;
-		}
+		final Block block = event.getBlock();
 
-		final Block testBlock = event.getBlock();
-		final World world = testBlock.getWorld();
-		final Block chairCandidate = world.getBlockAt(testBlock.getLocation().add(0d, 1d, 0d));
+		for (final Block b : surroundingBlocks(block)) {
 
-		if (!testBlock.isBlockFacePowered(BlockFace.UP)) {
+			final World world = b.getWorld();
+			final Block chairCandidate = world.getBlockAt(b.getLocation().add(0d, 1d, 0d));
 
-			if (Utils.isValidForChair(chairCandidate, (block) -> { // NOPMD by heiko on 04.11.22, 11:25
-
+			if (Utils.isValidForChair(chairCandidate, (p) -> {
 				return true;
-
-			})) {
+			}) && b.isBlockFaceIndirectlyPowered(BlockFace.UP)) {
 
 				Utils.doForNearbyZordanPigs(world, chairCandidate.getLocation(), pig, (p) -> {
 
@@ -71,5 +69,26 @@ public final class BlockPhysicsListener extends AbstractListener {
 				});
 			}
 		}
+	}
+
+	private List<Block> surroundingBlocks(final Block block) {
+
+		final ArrayList<Block> blocks = new ArrayList<Block>(BlockFace.values().length);
+
+		for (final BlockFace face : BlockFace.values()) {
+
+			if (face == BlockFace.UP) {
+
+				final Block above = block.getRelative(BlockFace.UP);
+				final Block above2 = above.getRelative(BlockFace.UP);
+
+				blocks.add(above);
+				blocks.add(above2);
+			}
+
+			blocks.add(block.getRelative(face));
+		}
+
+		return blocks;
 	}
 }
