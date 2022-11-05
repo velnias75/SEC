@@ -69,13 +69,7 @@ public final class BlockBreakExplodeListener extends AbstractListener {
 			}
 
 			if (Utils.isValidForChair(block)) {
-
-				Utils.doForNearbyZordanPigs(block.getWorld(), block.getLocation(), pig, (p) -> {
-
-					p.remove();
-					return true;
-
-				});
+				Utils.removeNearbyZordanPigs(block.getWorld(), block.getLocation(), pig);
 			}
 		}
 	}

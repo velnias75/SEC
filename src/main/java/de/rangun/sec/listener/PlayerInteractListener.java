@@ -67,12 +67,15 @@ public final class PlayerInteractListener extends AbstractListener {
 
 			if (Utils.isValidForChair(block)) {
 
-				final Boolean zpigAtBlock = Utils.doForNearbyZordanPigs(block.getWorld(), block.getLocation(), pig,
+				final Location zpigAtLocation = Utils.doForNearbyZordanPigs(block.getWorld(), block.getLocation(), pig,
 						(p) -> {
-							return p.getPassengers().isEmpty();
+							return !p.getPassengers().isEmpty();
 						});
 
-				if (zpigAtBlock != null && !zpigAtBlock) {
+				if (zpigAtLocation != null && block.getLocation().getBlockX() == zpigAtLocation.getBlockX()
+						&& block.getLocation().getBlockY() == zpigAtLocation.getBlockY()
+						&& block.getLocation().getBlockZ() == zpigAtLocation.getBlockZ()) {
+
 					return;
 				}
 

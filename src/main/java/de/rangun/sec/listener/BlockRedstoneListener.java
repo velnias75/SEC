@@ -73,7 +73,7 @@ public final class BlockRedstoneListener extends AbstractListener {
 
 	private List<Block> surroundingBlocks(final Block block) {
 
-		final ArrayList<Block> blocks = new ArrayList<Block>(BlockFace.values().length);
+		final List<Block> blocks = new ArrayList<>(BlockFace.values().length);
 
 		for (final BlockFace face : BlockFace.values()) {
 

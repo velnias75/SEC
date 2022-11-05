@@ -110,15 +110,25 @@ public final class Utils {
 						.equals(((Hopper) block.getState()).getCustomName().substring(0, pluginName.length() + 3));
 	}
 
-	public static Boolean doForNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig,
+	public static Location removeNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig) {
+
+		return doForNearbyZordanPigs(world, location, pig, (p) -> {
+
+			p.remove();
+			return true;
+
+		});
+	}
+
+	public static Location doForNearbyZordanPigs(final World world, final Location location, final NamespacedKey pig,
 			final Predicate<Entity> consumer) {
 
 		for (final Entity ent : world.getNearbyEntities(location, 1d, 1d, 1d,
 				(entity) -> EntityType.PIG.equals(entity.getType())
 						&& entity.getPersistentDataContainer().has(pig, PersistentDataType.BYTE))) {
 
-			if (consumer != null) {
-				return consumer.test(ent); // NOPMD by heiko on 04.11.22, 07:06
+			if (consumer != null && consumer.test(ent)) {
+				return ent.getLocation(); // NOPMD by heiko on 05.11.22, 05:21
 			}
 		}
 
