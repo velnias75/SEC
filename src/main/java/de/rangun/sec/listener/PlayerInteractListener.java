@@ -72,11 +72,15 @@ public final class PlayerInteractListener extends AbstractListener {
 							return !p.getPassengers().isEmpty();
 						});
 
-				if (zpigAtLocation != null && block.getLocation().getBlockX() == zpigAtLocation.getBlockX()
-						&& block.getLocation().getBlockY() == zpigAtLocation.getBlockY()
-						&& block.getLocation().getBlockZ() == zpigAtLocation.getBlockZ()) {
+				if (zpigAtLocation != null) {
 
-					return;
+					final Location newLocation = zpigAtLocation.add(-0.5d, 0.5d, -0.5d);
+
+					if (block.getLocation().getBlockX() == newLocation.getX()
+							&& block.getLocation().getBlockY() == newLocation.getY()
+							&& block.getLocation().getBlockZ() == newLocation.getZ()) {
+						return;
+					}
 				}
 
 				final Location location = player.getLocation();
@@ -98,7 +102,6 @@ public final class PlayerInteractListener extends AbstractListener {
 						vehicle.setAI(false);
 						vehicle.setLootTable(null);
 						vehicle.addScoreboardTag(TAG);
-						vehicle.setRotation(getChairYaw(block), 0.0f);
 						vehicle.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(0.0000000001d); // NOPMD by
 																										// heiko on
 																										// 05.06.22,
